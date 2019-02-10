@@ -80,7 +80,7 @@ export default {
       winCount: 3,
       timeoutID: 0,
       gameMsg: '',
-      gameEnd: 0
+      gameEnd: 0 // flag to determine if the game already end
     };
   },
   beforeMount() {
@@ -117,6 +117,7 @@ export default {
     },
     addPieceToColumn(e, column) {
 
+      // if the game already end prevent any actions, until the game resets
       if (this.gameEnd === 1) {
         return;
       }
@@ -206,7 +207,7 @@ export default {
       return Math.floor(Math.random() * Math.floor(max));
     },
     checkWinner() {
-      if (this.verticalWin() || this.horizontalWin() || this.diagonalWin()) { // check if any of the win condition returns true
+      if (this.countVertical() || this.countHorizontal() || this.countDiagonal()) { // check if any of the functions returns true
 
         this.gameMsg = `Game ends, Player-${this.playerTurn} wins`;
 
@@ -215,14 +216,12 @@ export default {
         alert.style.display = 'block';
 
         this.gameEnd = 1;
-        // reset 
-        //this.resetGame();
 
         return true;
       }
       return false;
     },
-    verticalWin() {
+    countVertical() {
       let currentValue = null,
         previousValue = 0,
         tally = 0;
@@ -252,7 +251,7 @@ export default {
       // No horizontal win was found.
       return false;
     },
-    horizontalWin() {
+    countHorizontal() {
       let currentValue = null,
         previousValue = 0,
         tally = 0;
@@ -282,10 +281,8 @@ export default {
       // No horizontal win was found.
       return false;
     },
-    diagonalWin() {
-      let x = null,
-        y = null,
-        xtemp = null,
+    countDiagonal() {
+      let xtemp = null,
         ytemp = null,
         currentValue = null,
         previousValue = 0,
